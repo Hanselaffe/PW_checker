@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function toggleApiKeyBox() {
+            var checkbox = document.getElementById('use_custom_api');
+            var apiKeyBox = document.getElementById('custom_api_key_box');
+            apiKeyBox.style.display = checkbox.checked ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Strength Checker</h1>
+        <form method="post" action="/check">
+            <input type="password" name="password" placeholder="Enter Password" required>
+            <label>
+                <input type="checkbox" id="use_custom_api" name="use_custom_api" onclick="toggleApiKeyBox()">
+                Use Custom API
+            </label>
+            <div id="custom_api_key_box" style="display:none;">
+                <input type="text" name="custom_api_key" placeholder="Enter your API key">
+            </div>
+            <button type="submit">Check</button>
+        </form>
+        {% if strength %}
+            <h2>Strength Results:</h2>
+            <ul>
+                <li>Length: {{ strength.length }}</li>
+                <li>Uppercase: {{ strength.uppercase }}</li>
+                <li>Lowercase: {{ strength.lowercase }}</li>
+                <li>Digits: {{ strength.digits }}</li>
+                <li>Special Characters: {{ strength.special_chars }}</li>
+                <li>Strength Score: {{ strength.score }}</li>
+            </ul>
+        {% endif %}
+        {% if leak %}
+            <h2>Leak Check Result:</h2>
+            <p>{{ leak }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
